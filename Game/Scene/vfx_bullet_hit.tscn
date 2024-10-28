@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://cvcs8h1sbsme"]
+
+[ext_resource type="Script" path="res://Game/Script/vfx_bullet_hit.gd" id="1_62hjf"]
+[ext_resource type="Texture2D" uid="uid://lhe85yjr7bi1" path="res://Asset/VFX/VFX_PlayerBulletHit.png" id="1_s0k6n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_86yu0"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gslqo"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dx7py"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hwc0"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abafs"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(128, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hpj5t"]
+atlas = ExtResource("1_s0k6n")
+region = Rect2(160, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p5hio"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_86yu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gslqo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dx7py")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hwc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abafs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hpj5t")
+}],
+"loop": false,
+"name": &"start",
+"speed": 20.0
+}]
+
+[node name="VFX_Bullet_Hit" type="Node2D"]
+script = ExtResource("1_62hjf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-16, 0)
+sprite_frames = SubResource("SpriteFrames_p5hio")
+animation = &"start"
+frame = 5
+frame_progress = 1.0
