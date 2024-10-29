@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://dawg0m7e1unfg"]
+[gd_scene load_steps=41 format=3 uid="uid://dawg0m7e1unfg"]
 
 [ext_resource type="Texture2D" uid="uid://c2arpyrm54mjg" path="res://Asset/Tilemap/Tilemap_ProjectLittleAdventurerAndie2D.png" id="1_vq0cy"]
 [ext_resource type="PackedScene" uid="uid://x6hgydr2koks" path="res://Game/Player.tscn" id="2_3tju1"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cgpqxl6ofsrtb" path="res://Asset/Background/CloseBackground/CBG03_ProjectLittleAdventurerAndie2D.png" id="15_rusbs"]
 [ext_resource type="Texture2D" uid="uid://bn8kfwu3ui2g7" path="res://Asset/Background/CloseBackground/CBG04_ProjectLittleAdventurerAndie2D.png" id="16_naghr"]
 [ext_resource type="Texture2D" uid="uid://3mumlglmp12n" path="res://Asset/Background/CloseBackground/CBG05_ProjectLittleAdventurerAndie2D.png" id="17_m501a"]
+[ext_resource type="Script" path="res://Game/Script/UI_Manager.gd" id="18_soj04"]
 [ext_resource type="PackedScene" uid="uid://b4h2a5som1kr7" path="res://Game/Scene/enemy.tscn" id="20_wuddo"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_n6adw"]
@@ -739,6 +740,23 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1v12g"]
+bg_color = Color(0, 0, 0, 1)
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.784314, 0.317647, 0.407843, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wc1oa"]
+bg_color = Color(0.784314, 0.317647, 0.407843, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
 [node name="Root" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -875,5 +893,29 @@ position = Vector2(136, 0)
 
 [node name="Enemy2" parent="." instance=ExtResource("20_wuddo")]
 position = Vector2(344, -16)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 110
+script = ExtResource("18_soj04")
+
+[node name="GameScreen" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/GameScreen"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 50.0
+offset_right = 449.0
+offset_bottom = 90.0
+theme_override_styles/background = SubResource("StyleBoxFlat_1v12g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wc1oa")
+step = 1.0
+value = 100.0
+show_percentage = false
 
 [connection signal="body_entered" from="Area2D_PlayerResetArea" to="Area2D_PlayerResetArea" method="_on_body_entered"]

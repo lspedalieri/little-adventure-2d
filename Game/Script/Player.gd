@@ -6,14 +6,38 @@ const JUMP_VELOCITY:int = -450
 const GRAVITY:int = 1800
 const SHOOT_DURATION : float = 0.249
 const SHOOTING_POSITION : int = 26
+const MAX_HEALTH : int = 100
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
 @onready var shooting_point = $Shooting_Point
 
 var airborne_last_frame = false
 var is_shooting : bool = false
+var current_health : int :
+	set(new_value):
+		current_health = new_value
+		emit_signal("playerHealthUpdated", current_health, MAX_HEALTH)
+
+enum PlayerStates {Normal, Hurt, Dead}
+
+signal playerHealthUpdated(new_value, max_value)
+
+var current_state : PlayerStates = PlayerStates.Normal:
+	set(new_value):
+		current_state = new_value
+		match current_state:
+			PlayerStates.Hurt:
+				if is_on_floor():
+					animated_sprite_2d.play("hit_stand")
+				else:
+					animated_sprite_2d.play("hit_jump")
+			PlayerStates.Dead:
+				animated_sprite_2d.play("die")
+				set_collision_layer_value(2, false)
+
 
 func _ready() -> void:
+	current_health = MAX_HEALTH
 	GameManager.player = self
 	GameManager.player_original_pos = position
 	
@@ -28,6 +52,11 @@ func _physics_process(delta) -> void:
 	elif airborne_last_frame:
 		playLandVFX()
 		airborne_last_frame = false
+		
+	if current_state == PlayerStates.Hurt || current_state == PlayerStates.Dead:
+		velocity.x = 0
+		move_and_slide()
+		return
 		
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y += JUMP_VELOCITY
@@ -50,6 +79,14 @@ func _physics_process(delta) -> void:
 
 
 func updateAnimation() -> void:
+	if current_state == PlayerStates.Dead:
+		return
+	elif current_state == PlayerStates.Hurt:
+		if animated_sprite_2d.is_playing():
+			return
+		else:
+			current_state = PlayerStates.Normal
+		
 	if velocity.x != 0:
 		animated_sprite_2d.flip_h = velocity.x < 0
 		if velocity.x < 0:
@@ -118,4 +155,13 @@ func playFireVFX():
 
 
 func applyDamage(damage : int) -> void:
+	print("trying to apply damage ", current_state)
+	if current_state == PlayerStates.Hurt || current_state == PlayerStates.Dead:
+		return
+		
 	print("player damaged")
+	current_health -= damage
+	current_state = PlayerStates.Hurt
+	if current_health <= 0:
+		current_health = 0
+		current_state = PlayerStates.Dead
