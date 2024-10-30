@@ -274,10 +274,11 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x3fe7"]
-size = Vector2(60, 40)
+size = Vector2(60, 48)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_wr2ie"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sldjl"]
 radius = 25.0
+height = 60.0
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 4
@@ -307,7 +308,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D_Container/Area2D_PlayerDetector"]
-position = Vector2(-30, -25)
+position = Vector2(-30, -24)
 shape = SubResource("RectangleShape2D_x3fe7")
 
 [node name="Area2D_DamageCaster" type="Area2D" parent="Area2D_Container"]
@@ -317,7 +318,8 @@ script = ExtResource("5_a7n0m")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D_Container/Area2D_DamageCaster"]
 position = Vector2(-30, -25)
-shape = SubResource("CircleShape2D_wr2ie")
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_sldjl")
 
 [connection signal="body_entered" from="Area2D_Container/Area2D_PlayerDetector" to="." method="_on_area_2d_player_detector_body_entered"]
 [connection signal="body_entered" from="Area2D_Container/Area2D_DamageCaster" to="Area2D_Container/Area2D_DamageCaster" method="_on_body_entered"]

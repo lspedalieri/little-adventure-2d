@@ -1,0 +1,73 @@
+[gd_scene load_steps=11 format=3 uid="uid://bokrbrys0ylgy"]
+
+[ext_resource type="Script" path="res://Game/Script/end_door.gd" id="1_dqy52"]
+[ext_resource type="Texture2D" uid="uid://bbdopioq1jiib" path="res://Asset/Animations/Other/Door.png" id="1_thxl8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_em8md"]
+size = Vector2(32, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6mxt"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(0, 0, 196, 146)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myvix"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(196, 0, 196, 146)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k12de"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(392, 0, 196, 146)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c57ev"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(588, 0, 196, 146)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qks66"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(784, 0, 196, 146)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8osgy"]
+atlas = ExtResource("1_thxl8")
+region = Rect2(980, 0, 196, 146)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t357d"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6mxt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_myvix")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k12de")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c57ev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qks66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8osgy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="EndDoor" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_dqy52")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -39)
+shape = SubResource("RectangleShape2D_em8md")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -73)
+sprite_frames = SubResource("SpriteFrames_t357d")
+autoplay = "default"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

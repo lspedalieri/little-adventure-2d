@@ -11,16 +11,21 @@ const MAX_HEALTH : int = 100
 @onready var animated_sprite_2d = $AnimatedSprite2D
 @onready var shooting_point = $Shooting_Point
 
+
 var airborne_last_frame = false
 var is_shooting : bool = false
+
 var current_health : int :
 	set(new_value):
 		current_health = new_value
 		emit_signal("playerHealthUpdated", current_health, MAX_HEALTH)
 
-enum PlayerStates {Normal, Hurt, Dead}
 
-signal playerHealthUpdated(new_value, max_value)
+var current_coins : int:
+	set(new_value):
+		print("set coins ", new_value)
+		current_coins = new_value
+		emit_signal("playerCoinUpdated", current_coins)
 
 var current_state : PlayerStates = PlayerStates.Normal:
 	set(new_value):
@@ -34,6 +39,15 @@ var current_state : PlayerStates = PlayerStates.Normal:
 			PlayerStates.Dead:
 				animated_sprite_2d.play("die")
 				set_collision_layer_value(2, false)
+				print("player dead")
+				GameManager.playerIsDead()
+			PlayerStates.Uncontrollable:
+				set_collision_layer_value(2, false)
+
+enum PlayerStates {Normal, Hurt, Dead, Uncontrollable}
+
+signal playerHealthUpdated(new_value, max_value)
+signal playerCoinUpdated(new_value)
 
 
 func _ready() -> void:
@@ -53,7 +67,7 @@ func _physics_process(delta) -> void:
 		playLandVFX()
 		airborne_last_frame = false
 		
-	if current_state == PlayerStates.Hurt || current_state == PlayerStates.Dead:
+	if current_state == PlayerStates.Hurt || current_state == PlayerStates.Dead || current_state == PlayerStates.Uncontrollable:
 		velocity.x = 0
 		move_and_slide()
 		return
@@ -165,3 +179,15 @@ func applyDamage(damage : int) -> void:
 	if current_health <= 0:
 		current_health = 0
 		current_state = PlayerStates.Dead
+
+func collectedCoin(value:int):
+	current_coins += value
+	if current_health < MAX_HEALTH:
+		current_health += value *3
+		if current_health > MAX_HEALTH:
+			current_health = MAX_HEALTH
+			
+
+func switchStateToUncontrollable():
+	current_state = PlayerStates.Uncontrollable
+
